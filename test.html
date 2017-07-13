@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0
+		}
+		.active {
+			color : red
+		}
+		.box {
+			width: 200px;
+			height: 200px;
+			float: left;
+			border: 1px solid gray;
+		}
+		ul li {
+			list-style: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">测试demo</div>
+	<ul id="list">
+		<li>我是第一个</li>
+		<li>我是第二个</li>
+		<li>我是第三个</li>
+		<li>我是第四个</li>
+	</ul>
+	
+	<script src='api.js'></script>
+	<script>			
+		$('.box', 'width');
+		$('.box', 'height', '300px');
+		$('.box', 'id', 'box');
+		$('#list', 'float', 'left');
+		$('li', 'class', 'active');	
+		$('li')[0].style.color = 'blue';		
+	</script>
+</body>
+</html>
