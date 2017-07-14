@@ -32,13 +32,34 @@
 	</ul>
 	
 	<script src='api.js'></script>
-	<script>			
+	<script>
+/**************************************************/	
 		$('.box', 'width');
 		$('.box', 'height', '300px');
 		$('.box', 'id', 'box');
 		$('#list', 'float', 'left');
 		$('li', 'class', 'active');	
-		$('li')[0].style.color = 'blue';		
+		$('li')[0].style.color = 'blue';
+		
+/**************************************************/
+		ajax({
+			method: 'POST',
+			url: 'test.php',
+			data: {
+				name1: 'value1',
+				name2: 'value2'
+			},
+			success: function (response) {
+				console.log(response);
+			}
+		});
+	
+/**************************************************/
+		console.log(DATE.now());
+		console.log(DATE.date());
+		console.log(DATE.time());
+		console.log(DATE.timestamp());
+		console.log(DATE.week());
 	</script>
 </body>
 </html>
