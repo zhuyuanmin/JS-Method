@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0
+		}
+		.container {
+			width: 1280px;
+			height: 720px;
+			background: #EEEEEE;
+			position: relative;
+			overflow: hidden;
+		}
+		li {
+			list-style: none;
+			width: 200px;
+			height: 280px;
+			text-align: center;
+			line-height: 300px;
+			font-size: 30px;
+			border: 1px solid gray;
+			transition: transform 0.5s;
+		}
+		.focus {
+			width: 200px;
+			height: 280px;
+			border: 4px solid red;
+			position: absolute;
+			top: 49px;
+			left: 18px;
+			transition: all 0.5s;
+		}
+		.group1 ul {
+			overflow: hidden;
+			width: 1942px;
+			height: 382px;
+			transform： scale(1.1, 1.1);
+			/*transition: all 0.5s;*/
+		}
+		.group1 ul li {
+			float: left;
+			margin: 50px 20px 0 20px;
+		}
+		.group1 ul li.first {
+			transform: scale(1.1, 1.1);
+		}
+		.group2 {
+			margin-top: 10px;
+		}
+		.group2 ul {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="group1">
+			<ul id="list1">
+				<li class="first">一</li>
+				<li>二</li>
+				<li>三</li>
+				<li>四</li>
+				<li>五</li>
+				<li>六</li>
+				<li>七</li>
+				<li>八</li>
+			</ul>
+		</div>
+		<div class="group2">
+			<ul id="list2">
+				<li>壹</li>
+				<li>貮</li>
+				<li>叁</li>
+				<li>肆</li>				
+			</ul>
+		</div>
+
+		<div class="focus"></div>
+	</div>
+
+	<script>
+		var active = document.getElementsByClassName('focus')[0];
+		var list1 = document.getElementById('list1');
+		var list2 = document.getElementById('list2');
+		var a = 0;
+
+		var Left = active.offsetLeft;
+		var Top = active.offsetTop;
+
+		active.style.transform = 'scale(1.1, 1.1)';
+
+		document.addEventListener('keydown', function (e) {			
+			keyWay.upMove(e);
+			keyWay.downMove(e);
+			keyWay.leftMove(e);
+			keyWay.rightMove(e);
+			keyWay.doConfirm(e);
+		})
+
+		var keyWay = {
+			upMove: function (e) {
+				if (e.keyCode == 38) {
+					// alert('上键')
+					if (Top <= 49) {
+						alert('到顶了');
+					} else {
+						var dataArr = [];
+						var arr = list1.getElementsByTagName('li');
+						var arr2 = list2.getElementsByTagName('li');
+
+						for (var i = 0; i < arr.length; i++) {							
+							dataArr.push(Math.abs(arr[i].offsetLeft - Left));							
+						};
+						dataArr.sort(function (a, b) {return a - b});
+						for (var i = 0; i < arr.length; i++) {							
+							if (arr[i].offsetLeft == Left + dataArr[0] || arr[i].offsetLeft == Left - dataArr[0]) {
+								Top =  arr[i].offsetTop - 2;
+								Left = arr[i].offsetLeft - 2;
+								active.style.top = Top + 'px';
+								active.style.left = Left + 'px';
+								arr[i].style.transform = 'scale(1.1, 1.1)';
+								a = i;
+							}
+						}
+						for (var i = 0; i < arr2.length; i++) {							
+							arr2[i].style.transform = 'scale(1, 1)';							
+						};
+					}
+				}
+			},
+			downMove: function (e) {
+				if (e.keyCode == 40) {
+					// alert('下键')
+					if (Top >= 390) {
+						alert('到底了');
+					} else {
+						var dataArr = [];
+						var arr = list2.getElementsByTagName('li');
+						var arr2 = list1.getElementsByTagName('li');
+
+						for (var i = 0; i < arr.length; i++) {							
+							dataArr.push(Math.abs(arr[i].offsetLeft - Left));							
+						};
+						dataArr.sort(function (a, b) {return a - b});
+						for (var i = 0; i < arr.length; i++) {
+							if (arr[i].offsetLeft == Left + dataArr[0] || arr[i].offsetLeft == Left - dataArr[0]) {
+								Top = arr[i].offsetTop - 2;
+								Left = arr[i].offsetLeft - 2;
+								active.style.top = Top + 'px';
+								active.style.left = Left + 'px';
+								arr[i].style.transform = 'scale(1.1, 1.1)';
+								a = i;
+							}
+						}
+						for (var i = 0; i < arr2.length; i++) {							
+							arr2[i].style.transform = 'scale(1, 1)';							
+						};
+					}
+				}
+			},
+			leftMove: function (e) {
+				if (e.keyCode == 37) {
+					// alert('左键')
+					if (Top == 48 || Top == 49) {
+						var arr = list1.getElementsByTagName('li');
+						if (Left <= arr[0].offsetLeft - 2) {
+							alert('最左边了')
+						} else {
+							// 移动方案一：
+							/*if (a <= 4) {
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;				
+							} else if (a == 5) {
+								list1.style.marginLeft = 0 + 'px';
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;
+							} else if (a == 6) {
+								var sum = ((300 + 2) * 6 + 40 * 5 + 20) - 1920 + 40;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;
+							} else if (a == 7) {
+								var sum = ((300 + 2) * 6 + 40 * 5 + 20) - 1920 + 40 + 302 + 40;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;
+							}*/
+
+							// 移动方案二：
+							if (a <= 4) {
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;				
+							} else if (a == 5) {
+								var sum =  0;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;
+							} else if (a == 6) {
+								var sum = 202 + 40;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;
+							} else if (a == 7) {
+								var sum = (202 + 40) * 2;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a - 1].offsetLeft - 2;
+								Top =   arr[a - 1].offsetTop - 2;
+							}
+							
+							active.style.top = Top + 'px';
+							active.style.left = Left + 'px';
+							arr[a - 1].style.transform = 'scale(1.1, 1.1)';
+							arr[a].style.transform = 'scale(1, 1)';
+							a--;
+						}
+					} else {
+						var arr = list2.getElementsByTagName('li');
+						if (Left <= arr[0].offsetLeft - 2) {
+							alert('最左边了')
+						} else {
+							Left =  arr[a - 1].offsetLeft - 2;
+							Top =   arr[a - 1].offsetTop - 2;
+							active.style.top = Top + 'px';
+							active.style.left = Left + 'px';
+							arr[a - 1].style.transform = 'scale(1.1, 1.1)';
+							arr[a].style.transform = 'scale(1, 1)';
+							a--;							
+						}
+					}
+				}
+			},
+			rightMove: function (e) {
+				if (e.keyCode == 39) {
+					// alert('右键')
+					if (Top == 48 || Top == 49) {
+						var arr = list1.getElementsByTagName('li');
+						if (Left >= arr[arr.length - 1].offsetLeft - 2) {
+							alert('最右边了')
+						} else {
+							if (a < 4) {
+								Left =  arr[a + 1].offsetLeft - 2;
+								Top =  arr[a + 1].offsetTop - 2;	
+							} else if (a == 4) {
+								var sum = 202 + 40;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a + 1].offsetLeft - 2;
+								Top =  arr[a + 1].offsetTop - 2;
+							} else if (a == 5) {
+								var sum = (202 + 40) * 2;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a + 1].offsetLeft - 2;
+								Top =  arr[a + 1].offsetTop - 2;
+							} else if (a == 6) {
+								var sum = (202 + 40) * 2 + 202 - 20;
+								list1.style.marginLeft = 0 - sum + 'px';
+								Left =  arr[a + 1].offsetLeft - 2;
+								Top =  arr[a + 1].offsetTop - 2;
+							}
+
+							active.style.top = Top + 'px';
+							active.style.left = Left + 'px';
+							arr[a + 1].style.transform = 'scale(1.1, 1.1)';
+							arr[a].style.transform = 'scale(1, 1)';
+							a++;							
+						}
+					} else {
+						var arr = list2.getElementsByTagName('li');
+						if (Left >= arr[arr.length - 1].offsetLeft - 2) {
+							alert('最右边了')
+						} else {
+							Left =  arr[a + 1].offsetLeft - 2;
+							Top =   arr[a + 1].offsetTop - 2;
+							active.style.top = Top + 'px';
+							active.style.left = Left + 'px';
+							arr[a + 1].style.transform = 'scale(1.1, 1.1)';
+							arr[a].style.transform = 'scale(1, 1)';
+							a++;
+						}
+					}
+				}
+			},
+			doConfirm: function (e) {
+				if (e.keyCode == 13) {
+					var Px, py;
+
+					if (/\.NET/.test(navigator.userAgent)) {
+						Px = e.target.children[2].offsetLeft;
+						Py = e.target.children[2].offsetTop;
+					} else {
+						Px = e.target.children[0].children[2].offsetLeft;
+						Py = e.target.children[0].children[2].offsetTop;
+					}
+					
+					if (Py == 48 || Py == 49) {						
+						alert('你点击了第一排第 ' + Number(a + 1) + ' 个');
+					} else {
+						alert('你点击了第二排第 ' + Number(a + 1) + ' 个');
+					}
+				}
+			}
+		}
+
+	</script>
+</body>
+</html>
