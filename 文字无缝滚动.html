@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    #father {
+      width: 150px;
+      overflow: hidden;
+    }
+
+    #scrollobj {
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    #scrollobj.focus {
+      display: inline-block;
+    }
+
+    #scrollobj.blur {
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="father">
+    <div id="scrollobj" class="focus">这里是滚动内容纯文字哈哈哈，滚动吧</div>
+  </div>
+  <script>
+    var $scrollobj = document.getElementById('scrollobj');
+    var $father = document.getElementById('father');
+    var $width = $scrollobj.clientWidth;
+    var f_width = $father.clientWidth;
+
+    scroll($width, f_width, $scrollobj);
+
+    /**
+     * @name scroll
+     * @param {number} $width 滚动文字长度
+     * @param {number} f_width 容器长度
+     * @description 文字水平无限滚动
+     */
+    function scroll($width, f_width, ele) {
+      var temp = 0;
+      if ($width > f_width) { //判断是否需要滚动
+        var timer = setInterval(function () {
+          roll($width, f_width, ele);
+        }, 30);
+      }
+
+      function roll($width, f_width, ele) {
+        temp++;
+        ele.style.transform = "translateX(-" + temp + "px)";
+        //当滚动条到达右边顶端时 
+        if (temp == ele.scrollWidth - $father.clientWidth) {
+          ele.innerHTML += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ele.innerHTML;
+        }
+        //当滚动条滚动了初始内容的宽度时滚动条回到最左端 
+        if (temp >= $width + 28) {
+          temp = 0;
+          ele.style.transform = "translateX(0px)";
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
