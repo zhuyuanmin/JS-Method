@@ -225,6 +225,8 @@ function startMove(obj, json, fn) {
       if (fn) {
         fn()
       }
+    } else {
+      all = true;
     }
   }, 30)
 
